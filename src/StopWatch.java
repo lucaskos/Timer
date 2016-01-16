@@ -63,10 +63,10 @@ public class StopWatch extends JLabel implements ActionListener {
                 - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
         
 //ms is not used in this program
-//        final long ms = TimeUnit.MILLISECONDS.toMillis(time
-//                - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min)
-//                - TimeUnit.SECONDS.toMillis(sec));
-        return String.format("%02d:%02d:%02d", hr, min, sec);
+        final long ms = TimeUnit.MILLISECONDS.toMillis(time
+                - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min)
+                - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d:%02d", hr, min, sec, ms);
     }
 
     private static void create() {
