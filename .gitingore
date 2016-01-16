@@ -1,2 +1,11 @@
+#ANDROID IGNORES
+#Build application files
+*.apk
+*.ap_
+
 # Java class files
 *.class
+
+#Generated files
+bin/
+src/
