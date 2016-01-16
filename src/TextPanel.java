@@ -17,7 +17,4 @@ public class TextPanel extends JTextPane {
 	public void appendText(String time) {
 		textArea.append(time);
 	}
-	public void appendTable() {
-		
-	}
 }

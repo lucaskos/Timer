@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class TextLabel extends JLabel implements ActionListener {
@@ -60,11 +58,11 @@ public class TextLabel extends JLabel implements ActionListener {
 	}
 
 	public String getTimeOfActionEnd() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(pauseTime);
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS").format(pauseTime);
 	}
 
 	public String getTimeOfActionStart() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTime);
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS").format(startTime);
 
 	}
 

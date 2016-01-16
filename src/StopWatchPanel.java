@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,11 +24,11 @@ public class StopWatchPanel extends JPanel {
 	private TextLabel textLabel;
 	private JButton button;
 	private JButton resetBtn;
-	private DateListener dateListener;
 	private JTextField title;
 	private JTextArea description;
 	private JLabel titleLabel;
 	private JLabel descrLabel;
+	private DateListener dateListener;
 	
 	public StopWatchPanel() {
 		int size = 20;
@@ -45,7 +44,6 @@ public class StopWatchPanel extends JPanel {
 		titleLabel = new JLabel("Title: ");
 		descrLabel = new JLabel("Description: ");
 		
-		
 		description.setColumns(size);
 		description.setWrapStyleWord(false);
 		description.setLineWrap(false);
@@ -53,7 +51,6 @@ public class StopWatchPanel extends JPanel {
 		description.setVisible(true);
 		
 		makeLayout();
-		
 
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -65,9 +62,11 @@ public class StopWatchPanel extends JPanel {
 					button.setText(Start);
 					//System.out.println("Stop: " + textLabel.getTimeOfActionEnd() + "\n\n");
 					int time = textLabel.getSeconds();
-					//dateListener.appendText(CZAS: " + time  + "\n");
-					//tableListener.appendTable(title, description, time)
-					StopWatchPanelEvent ev = new StopWatchPanelEvent(this, titleField, descriptionField, time);
+					dateListener.appendText("CZAS: " + time  + "\n");
+					
+//making an interface to pass information to be put into table
+
+					//StopWatchPanelEvent ev = new StopWatchPanelEvent(this, titleField, descriptionField, time);
 				} else {
 					textLabel.start();
 					//System.out.println("Start: " + textLabel.getTimeOfActionStart());
