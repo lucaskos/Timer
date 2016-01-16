@@ -20,8 +20,6 @@ public class StopWatch extends JLabel implements ActionListener {
     private long startTime;
     private long pauseTime;
     
-    private DateListener dateListener;
-
     public StopWatch() {
         this.setHorizontalAlignment(JLabel.CENTER);
         this.setText(getCurrentTime(System.currentTimeMillis() - initTime));
@@ -63,6 +61,8 @@ public class StopWatch extends JLabel implements ActionListener {
                 - TimeUnit.HOURS.toMillis(hr));
         final long sec = TimeUnit.MILLISECONDS.toSeconds(time
                 - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+        
+//ms is not used in this program
         final long ms = TimeUnit.MILLISECONDS.toMillis(time
                 - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min)
                 - TimeUnit.SECONDS.toMillis(sec));
