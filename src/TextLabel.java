@@ -39,13 +39,6 @@ public class TextLabel extends JLabel implements ActionListener {
 	public void pause() {
 		pauseTime = System.currentTimeMillis();
 		time = (int) ((pauseTime - startTime) / 1000);
-		
-		DateListener dateListener = new DateListener() {
-			public void appendText(String time) {
-				this.appendText(time.toString());
-			}
-
-		};
 		timer.stop();
 	}
 

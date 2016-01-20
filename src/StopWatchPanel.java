@@ -30,12 +30,15 @@ public class StopWatchPanel extends JPanel {
 	private JLabel descrLabel;
 	private DateListener dateListener;
 	
+	private Controller controller;
+	
 	public StopWatchPanel() {
 		int size = 20;
 		Dimension dim = getPreferredSize();
 		dim.width = 400;
 		setPreferredSize(dim);
 
+		
 		button = new JButton(Start);
 		resetBtn = new JButton(Reset);
 		textLabel = new TextLabel();
@@ -56,17 +59,20 @@ public class StopWatchPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String cmd = e.getActionCommand();
 				if (Stop.equals(cmd)) {
-					String titleField = title.getText();
-					String descriptionField = description.getText();
 					textLabel.pause();
 					button.setText(Start);
 					//System.out.println("Stop: " + textLabel.getTimeOfActionEnd() + "\n\n");
 					int time = textLabel.getSeconds();
-					dateListener.appendText("CZAS: " + time  + "\n");
+//					dateListener.appendText("CZAS: " + time  + "\n");
 					
-//making an interface to pass information to be put into table
-
-					//StopWatchPanelEvent ev = new StopWatchPanelEvent(this, titleField, descriptionField, time);
+					//Making call to other cell in the GUI, to append JTable
+					//Has to be made either through controller or through listener
+					dateListener.appendTable(title.getText(), description.getText(), time);
+					
+					
+					//Controller to pass it to Database in the future
+					controller = new Controller(title.getText(), description.getText(), time);
+					
 				} else {
 					textLabel.start();
 					//System.out.println("Start: " + textLabel.getTimeOfActionStart());

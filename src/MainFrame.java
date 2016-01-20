@@ -1,23 +1,35 @@
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JScrollPane;
 
 public class MainFrame extends JFrame {
 	private StopWatchPanel stopWatchPanel;
 	private TextPanel textPanel;
+	
+	private TablePanel tablePanel;
 
 	public MainFrame() {
 
 		stopWatchPanel = new StopWatchPanel();
 		textPanel = new TextPanel();
-
+		tablePanel = new TablePanel();
+		
 		setLayout(new BorderLayout());
 		add(stopWatchPanel, BorderLayout.WEST);
-		add(textPanel, BorderLayout.CENTER);
+		add(new JScrollPane(tablePanel), BorderLayout.CENTER);
+		//add(textPanel, BorderLayout.CENTER);
 
 		stopWatchPanel.setWatchPanelListener(new DateListener() {
-			public void appendText(String time) {
-				textPanel.appendText(time);
+//			public void appendText(String time) {
+//				textPanel.appendText(time);
+//			}
+
+			@Override
+			public void appendTable(String title, String description, int time) {
+				tablePanel.appendTable(title, description, time);
+				
 			}
 
 		});
