@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Controller {
 	
@@ -9,6 +10,7 @@ public class Controller {
 		this.title = title;
 		this.description = description;
 		this.time = time;
+		
 	}
 
 }

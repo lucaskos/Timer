@@ -1,13 +1,14 @@
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 
 public class MainFrame extends JFrame {
 	private StopWatchPanel stopWatchPanel;
 	private TextPanel textPanel;
-	
+	private MenuBar menuBar;
 	private TablePanel tablePanel;
 
 	public MainFrame() {
@@ -15,11 +16,13 @@ public class MainFrame extends JFrame {
 		stopWatchPanel = new StopWatchPanel();
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
+		menuBar = new MenuBar();
+		
 		
 		setLayout(new BorderLayout());
 		add(stopWatchPanel, BorderLayout.WEST);
 		add(new JScrollPane(tablePanel), BorderLayout.CENTER);
-		//add(textPanel, BorderLayout.CENTER);
+		add(menuBar, BorderLayout.NORTH);
 
 		stopWatchPanel.setWatchPanelListener(new DateListener() {
 //			public void appendText(String time) {
