@@ -1,27 +1,28 @@
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 public class TablePanel extends JTable {
 	private DefaultTableModel model;
-	private static int rowCount;
+	
+	private ActivityTableModel at_model;
 	String[] colNames = {"Activity", "Description", "Time"};
 
 	TablePanel() {
 		model = new DefaultTableModel(colNames, 0);
-		setEnabled(false);
-		setModel(model);
 		
+		at_model = new ActivityTableModel();
 		
-		model.insertRow(0, new Object[] {"22", "aa", 2});
+		//what is this?
+		//setEnabled(false);
+		setModel(at_model);
+		
 	}
-	public void appendRow(String[] list) {
-		
-	}
+	
 	public void appendTable(String title, String description, int time) {
 		model.insertRow(0, new Object[] {title, description, time});
 		
+	}
+	public void refresh() {
+		at_model.fireTableDataChanged();		
 	}
 }

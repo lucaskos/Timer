@@ -27,7 +27,7 @@ public class StopWatchPanel extends JPanel {
 	private JTextArea description;
 	private JLabel titleLabel;
 	private JLabel descrLabel;
-	private DateListener dateListener;
+	private TableListener tableListener;
 
 	private Controller controller;
 
@@ -75,11 +75,18 @@ public class StopWatchPanel extends JPanel {
 						// JTable
 						// Has to be made either through controller or through
 						// listener
-						dateListener.appendTable(title.getText().trim(), description.getText().trim(), time);
+						//tableListner.appendTable(title.getText().trim(), description.getText().trim(), time);
 
 						// Controller to pass it to Database in the future
-						controller = new Controller(title.getText(), description.getText(), time);
-
+						//controller = new Controller(title.getText(), description.getText(), time);
+						String titleFieldText = title.getText();
+						String descriptionFieldText = description.getText();
+						
+						TableEvent ev = new TableEvent(this, titleFieldText, descriptionFieldText, time);
+						System.out.println(ev.toString());
+						if(tableListener != null) {
+							tableListener.formEventOccurred(ev);
+						}
 					} else {
 						textLabel.start();
 						// System.out.println("Start: " +
@@ -157,7 +164,7 @@ public class StopWatchPanel extends JPanel {
 
 	}
 
-	public void setWatchPanelListener(DateListener dateListener) {
-		this.dateListener = dateListener;
+	public void setWatchPanelListener(TableListener tableListener) {
+		this.tableListener = tableListener;
 	}
 }

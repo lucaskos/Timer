@@ -1,16 +1,24 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
 	
-	private String title;
-	private String description;
-	private int time;
-	
-	public Controller(String title, String description, int time) {
-		this.title = title;
-		this.description = description;
-		this.time = time;
+	Database db = new Database();
+		
+	public List<Activity> getActivities(){
+		return db.getActivities();
+	}
+
+	public void addActivity(TableEvent e) {
+		String title = e.getTitle();
+		String description = e.getDescription();
+		int time = e.getTime();
+		
+		Activity activity = new Activity(title, description, time);
+		db.addActivity(activity);
 		
 	}
+	
+	
 
 }
