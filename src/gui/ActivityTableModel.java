@@ -1,6 +1,9 @@
+package gui;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
+
+import model.Activity;
 
 public class ActivityTableModel extends AbstractTableModel {
 
@@ -8,17 +11,25 @@ public class ActivityTableModel extends AbstractTableModel {
 
 	private String[] colNames = { "ID", "Title", "Description", "Time" };
 
+	public ActivityTableModel() {
+		System.out.println(this.getColumnName(1));
+	}
+
+	@Override
+	public String getColumnName(int column) {
+		return colNames[column];
+	}
+
 	@Override
 	public int getColumnCount() {
-		return 5;
+		return colNames.length;
 	}
 
 	@Override
 	public int getRowCount() {
-		return 0;
-//		return db.size();
+		return db.size();
 	}
-	
+
 	public void setData(List<Activity> db) {
 		this.db = db;
 	}

@@ -22,3 +22,6 @@
 /TableEvent.class
 /TableListener.class
 /ActivityTableModel.class
+/model/
+/controller/
+/gui/

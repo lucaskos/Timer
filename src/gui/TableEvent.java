@@ -1,25 +1,17 @@
-import java.io.Serializable;
+package gui;
+import java.util.EventObject;
 
-public class Activity implements Serializable {
+public class TableEvent extends EventObject {
 
-	private static final long serialVersionUID = 86186321831675684L;
-	
-	private static int count = 0;
-	
-	private int id;
-	
 	private String title;
 	private String description;
 	private int time;
 	
-	public Activity(String title, String description, int time) {
-		super();
+	public TableEvent(Object source, String title, String description, int time ){
+		super(source);
 		this.title = title;
 		this.description = description;
 		this.time = time;
-		
-		this.id = count;
-		count++;
 	}
 
 	public String getTitle() {
@@ -46,12 +38,8 @@ public class Activity implements Serializable {
 		this.time = time;
 	}
 
-	public int getId() {
-		return id;
-	}
 
-	public void setId(int id) {
-		this.id = id;
+	public String toString(){
+		return getTitle() + " " + getDescription() + " " + getTime();
 	}
-	
 }

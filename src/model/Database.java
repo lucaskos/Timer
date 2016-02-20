@@ -1,3 +1,5 @@
+package model;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,14 +11,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Database {
+
 	private ArrayList<Activity> activities;
 
 	public Database() {
 		activities = new ArrayList<Activity>();
 	}
 
-	public void addActivity(Activity Activity) {
-		activities.add(Activity);
+	public void addActivity(Activity Activities) {
+		activities.add(Activities);
 	}
 
 	public List<Activity> getActivities() {
@@ -27,9 +30,9 @@ public class Database {
 		FileOutputStream fos = new FileOutputStream(file);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-		Activity[] Activitys = activities.toArray(new Activity[activities.size()]);
+		Activity[] Activities = activities.toArray(new Activity[activities.size()]);
 
-		oos.writeObject(Activitys);
+		oos.writeObject(Activities);
 
 		oos.close();
 	}
@@ -38,10 +41,10 @@ public class Database {
 		FileInputStream fis = new FileInputStream(file);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		try {
-			Activity[] Activitys = (Activity[]) ois.readObject();
+			Activity[] Activities = (Activity[]) ois.readObject();
 			activities.clear();
 
-			activities.addAll(Arrays.asList(Activitys));
+			activities.addAll(Arrays.asList(Activities));
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

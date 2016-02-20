@@ -1,3 +1,4 @@
+package gui;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,7 +30,6 @@ public class StopWatchPanel extends JPanel {
 	private JLabel descrLabel;
 	private TableListener tableListener;
 
-	private Controller controller;
 
 	public StopWatchPanel() {
 		int size = 20;
@@ -69,16 +69,7 @@ public class StopWatchPanel extends JPanel {
 						// System.out.println("Stop: " +
 						// textLabel.getTimeOfActionEnd() + "\n\n");
 						int time = textLabel.getSeconds();
-						// dateListener.appendText("CZAS: " + time + "\n");
-
-						// Making call to other cell in the GUI, to append
-						// JTable
-						// Has to be made either through controller or through
-						// listener
-						//tableListner.appendTable(title.getText().trim(), description.getText().trim(), time);
-
-						// Controller to pass it to Database in the future
-						//controller = new Controller(title.getText(), description.getText(), time);
+						
 						String titleFieldText = title.getText();
 						String descriptionFieldText = description.getText();
 						

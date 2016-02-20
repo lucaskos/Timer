@@ -1,5 +1,11 @@
-import java.util.ArrayList;
+package controller;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import gui.TableEvent;
+import model.Activity;
+import model.Database;
 
 public class Controller {
 	
@@ -19,6 +25,10 @@ public class Controller {
 		
 	}
 	
-	
-
+	public void saveToFile(File file) throws IOException {
+		db.saveToFile(file);
+	}
+	public void loadFromFile(File file) throws IOException {
+		db.loadFromFile(file);
+	}
 }

@@ -1,19 +1,18 @@
+package gui;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+
+import controller.Controller;
 
 public class MenuBar extends JMenuBar {
 
@@ -22,6 +21,7 @@ public class MenuBar extends JMenuBar {
 	private JMenuItem importItem;
 	private JFileChooser fc;
 	private JMenuItem exitItem;
+	private Controller controller;
 
 	MenuBar() {
 
@@ -29,7 +29,9 @@ public class MenuBar extends JMenuBar {
 		// Filter show only extension given in the class Utils inside class
 		// Filter
 		fc.addChoosableFileFilter(new FFilter());
-
+		controller = new Controller();
+		
+		
 		mainItem = new JMenu("File");
 		exportItem = new JMenuItem("Export...");
 		importItem = new JMenuItem("Import...");
@@ -57,31 +59,15 @@ public class MenuBar extends JMenuBar {
 		 */
 		exportItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// fc.showSaveDialog(MenuBar.this);
-				int results = fc.showSaveDialog(MenuBar.this);
-				if (results == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					System.out.println(fc.getSelectedFile());
-//					InputStream in;
-//					try {
-//						in = new FileInputStream(file);
-//						OutputStream fos = new FileOutputStream(file);
-//						if (!file.exists()) {
-//							file.createNewFile();
-//						}
-//						fos.write();
-//						fos.close();
-//					} catch (FileNotFoundException e1) {
-//						System.out.println("File not found");
-//					} catch (IOException e1) {
-//						e1.printStackTrace();
-//					}
+				if (fc.showSaveDialog(MenuBar.this) == JFileChooser.APPROVE_OPTION) {
+					try {
+						controller.saveToFile(fc.getSelectedFile());
 
-				} else { // cancelling option
-					// if(results == JFileChooser.CANCEL_OPTION) {
-					System.out.println("saving canceled");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-
 			}
 		}); // the end of saving item in the menu
 
