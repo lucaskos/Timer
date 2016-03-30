@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -13,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import controller.Controller;
@@ -23,9 +26,13 @@ public class MainFrame extends JFrame {
 	private JFileChooser fileChooser;
 	private Controller controller;
 	private FFilter fileFilter;
+	private JToolBar toolBar;
 
 	public MainFrame() {
+		toolBar = new JToolBar();
 
+		toolBar.setSize(400, 36);
+		toolBar.setFloatable(false);
 		controller = new Controller();
 
 		stopWatchPanel = new StopWatchPanel();
@@ -51,7 +58,6 @@ public class MainFrame extends JFrame {
 			}
 
 		});
-
 		add(stopWatchPanel, BorderLayout.WEST);
 		add(new JScrollPane(tablePanel), BorderLayout.CENTER);
 
@@ -81,14 +87,23 @@ public class MainFrame extends JFrame {
 		importItem.setMnemonic(KeyEvent.VK_I);
 		exitItem.setMnemonic(KeyEvent.VK_X);
 		fileMenu.setMnemonic(KeyEvent.VK_F);
+		
+		JMenu windowMenu = new JMenu("Window");
+		JCheckBoxMenuItem showItem = new JCheckBoxMenuItem("Show form");
+		showItem.setSelected(true);
+		windowMenu.add(showItem);
 
 		menuBar.add(fileMenu);
+		menuBar.add(windowMenu);
 
 		// Setting up accelerator
 		// CTRL+X is not working casue is taken on linux
-		exportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-		importItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
-		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
+		exportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		importItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
+				ActionEvent.CTRL_MASK));
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+				ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
 
 		/*
 		 * file opener extensions are not shown up. check getDescription
@@ -100,7 +115,8 @@ public class MainFrame extends JFrame {
 						controller.loadFromFile(fileChooser.getSelectedFile());
 						tablePanel.refresh();
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(MainFrame.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, ex,
+								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -111,7 +127,6 @@ public class MainFrame extends JFrame {
 		 * (JPanel implements serializable) Need to pass it through
 		 * constructor(and or Data) to save information from JTable It shows
 		 * prompt to create a file but doesn't create one
-		 * 
 		 */
 		exportItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -120,7 +135,8 @@ public class MainFrame extends JFrame {
 						controller.saveToFile(fileChooser.getSelectedFile());
 
 					} catch (IOException ex) {
-						JOptionPane.showMessageDialog(MainFrame.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainFrame.this, ex,
+								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -131,6 +147,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(1);
 
+			}
+		});
+		
+		showItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JCheckBoxMenuItem temp = (JCheckBoxMenuItem) e.getSource();
+				stopWatchPanel.setVisible(temp.isSelected());
 			}
 		});
 

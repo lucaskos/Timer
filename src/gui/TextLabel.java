@@ -33,6 +33,7 @@ public class TextLabel extends JLabel implements ActionListener {
 	public void reset() {
 		startTime = 0;
 		this.pause();
+		timer.stop();
 		isRunning = false;
 		this.setText(getCurrentTime(System.currentTimeMillis() - System.currentTimeMillis()));
 	}

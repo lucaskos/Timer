@@ -1,14 +1,19 @@
 package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Savepoint;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -18,91 +23,119 @@ import javax.swing.border.Border;
 public class StopWatchPanel extends JPanel {
 
 	private static final String Start = "Start";
-	private static final String Stop = "Stop";
+	private static final String Stop = "Save";
 	private static final String Reset = "Reset";
+	private static final String Pause = "Pause";
+	private static final String Resume = "Resume";
 
 	private TextLabel textLabel;
-	private JButton button;
+	private JButton startBtn;
 	private JButton resetBtn;
-	private JTextField title;
-	private JTextArea description;
+	private JButton pauseBtn;
+	private JButton stopBtn;
+	private JTextField titleField;
+	private JTextArea descrField;
 	private JLabel titleLabel;
 	private JLabel descrLabel;
 	private TableListener tableListener;
 
+	private JPanel jp;
 
 	public StopWatchPanel() {
 		int size = 20;
 		Dimension dim = getPreferredSize();
-		dim.width = 400;
+		dim.width = 450;
 		setPreferredSize(dim);
-
-		button = new JButton(Start);
-		resetBtn = new JButton(Reset);
-		textLabel = new TextLabel();
-		title = new JTextField(size);
-		description = new JTextArea();
 		titleLabel = new JLabel("Title: ");
-		descrLabel = new JLabel("Description: ");
+		startBtn = new JButton(Start);
+		resetBtn = new JButton(Reset);
+		pauseBtn = new JButton(Pause);
 
-		description.setColumns(size);
-		description.setWrapStyleWord(false);
-		description.setLineWrap(false);
-		description.setRows(4);
-		description.setVisible(true);
+		stopBtn = new JButton(Stop);
+		stopBtn.setEnabled(false);
+
+		textLabel = new TextLabel();
+		titleField = new JTextField(size);
+		descrField = new JTextArea();
+
+		descrLabel = new JLabel("descrField: ");
+
+		descrField.setColumns(size);
+		descrField.setWrapStyleWord(false);
+		descrField.setLineWrap(false);
+		descrField.setRows(4);
+		descrField.setVisible(true);
 
 		makeLayout();
+		defaultButtonsState();
 
-		button.addActionListener(new ActionListener() {
+		startBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String cmd = e.getActionCommand();
-
-				// create a method to validate title and description
-				// trim, firstToUpperCase
-
-				if (title.getText().trim().isEmpty() || description.getText().trim().isEmpty()) {
-					System.out.println("enter text");
+				if (checkingTextFields() != false) {
+					textFieldErrorPane();
 				} else {
-					if (Stop.equals(cmd)) {
-						textLabel.pause();
-						button.setText(Start);
-						// System.out.println("Stop: " +
-						// textLabel.getTimeOfActionEnd() + "\n\n");
-						int time = textLabel.getSeconds();
-						
-						String titleFieldText = title.getText();
-						String descriptionFieldText = description.getText();
-						
-						TableEvent ev = new TableEvent(this, titleFieldText, descriptionFieldText, time);
-						System.out.println(ev.toString());
-						if(tableListener != null) {
-							tableListener.formEventOccurred(ev);
-						}
-					} else {
-						textLabel.start();
-						// System.out.println("Start: " +
-						// textLabel.getTimeOfActionStart());
-						button.setText(Stop);
-					}
+					textLabel.start();
+					pauseBtn.setEnabled(true);
+					stopBtn.setEnabled(true);
+					startBtn.setEnabled(false);
 				}
+				/*
+				 * poprawic wyswietlanie w minutach i godzinach i sekundach
+				 * 
+				 * private String checkTime(int time) { if(time > 60) { return
+				 * new SimpleDateFormat("mm:ss").format(time); } else if (time >
+				 * 3600) { return new SimpleDateFormat("HH:mm:ss").format(time);
+				 * } else { return "" +time; }
+				 * 
+				 * 
+				 * }
+				 */
 			}
-			/*
-			 * poprawic wyswietlanie w minutach i godzinach i sekundach
-			 * 
-			 * private String checkTime(int time) { if(time > 60) { return new
-			 * SimpleDateFormat("mm:ss").format(time); } else if (time > 3600) {
-			 * return new SimpleDateFormat("HH:mm:ss").format(time); } else {
-			 * return "" +time; }
-			 * 
-			 * 
-			 * }
-			 */
 		});
+		// saving data
+		stopBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String titleFieldText = titleField.getText();
+				String descrFieldFieldText = descrField.getText();
+				textLabel.pause();
+				int time = textLabel.getSeconds();
+				textLabel.reset();
+				System.out.println(time + "\n");
+				TableEvent ev = new TableEvent(this, titleFieldText,
+						descrFieldFieldText, time);
+				if (tableListener != null) {
+					tableListener.formEventOccurred(ev);
+				}
+				// after the object is saved
+				titleField.setText(null);
+				titleField.requestFocus();
+				descrField.setText(null);
+
+			}
+		});
+		// reseting timer
+		// setting timeLabel to 0 (zero)
 		resetBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				textLabel.reset();
+				startBtn.setEnabled(true);
+				titleField.requestFocus();
+				stopBtn.setEnabled(false);
+
+			}
+		});
+		// pause/resume button
+		pauseBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				String cmd = e.getActionCommand();
-				if (Reset.equals(cmd))
-					textLabel.reset();
+				if (cmd == Pause) {
+					textLabel.pause();
+					pauseBtn.setText(Resume);
+				} else {
+					textLabel.start();
+					pauseBtn.setText(Pause);
+				}
+
 			}
 		});
 	}
@@ -111,48 +144,90 @@ public class StopWatchPanel extends JPanel {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(border);
 
-		JScrollPane areaScrollPane = new JScrollPane(description);
-		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		JScrollPane areaScrollPane = new JScrollPane(descrField);
+		areaScrollPane
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		GridBagLayout gbl = new GridBagLayout();
 
-		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
+		jp = new JPanel();
+		jp.setLayout(gbl);
+
+		gbc.insets = new Insets(20, 5, 5, 5);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+
+		// first label
+
 		gbc.gridy = 0;
 		gbc.gridx = 0;
+		gbl.setConstraints(titleLabel, gbc);
+		jp.add(titleLabel);
 
-		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		add(titleLabel, gbc);
 		gbc.gridx = 1;
-		add(title, gbc);
+		gbl.setConstraints(titleField, gbc);
+		jp.add(titleField);
 
-		gbc.gridy = 1;
+		gbc.insets = new Insets(0, 5, 5, 5);
+		gbc.gridy++;
 		gbc.gridx = 0;
-		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		add(descrLabel, gbc);
+		gbl.setConstraints(descrLabel, gbc);
+		jp.add(descrLabel);
+
 		gbc.gridx = 1;
-		gbc.weightx = 0.1;
-		// gbc.weighty = 0.2;
-		add(areaScrollPane, gbc);
+		gbl.setConstraints(areaScrollPane, gbc);
+		jp.add(areaScrollPane);
+
+		gbc.insets = new Insets(20, 5, 5, 5);
+		gbc.anchor = GridBagConstraints.BELOW_BASELINE;
+		gbc.gridy++;
+		gbc.gridx = 0;
+		gbl.setConstraints(resetBtn, gbc);
+		jp.add(resetBtn);
+
+		gbc.gridx = 1;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbl.setConstraints(textLabel, gbc);
+		jp.add(textLabel);
 
 		gbc.gridy++;
 		gbc.gridx = 0;
-		gbc.weightx = 3;
-		gbc.gridwidth = 5;
-		gbc.anchor = GridBagConstraints.LINE_END;
-		add(resetBtn, gbc);
+		gbl.setConstraints(startBtn, gbc);
+		jp.add(startBtn);
+		gbc.gridx = 1;
+
+		gbl.setConstraints(pauseBtn, gbc);
+		jp.add(pauseBtn);
 
 		gbc.gridy++;
 		gbc.gridx = 0;
-		gbc.gridwidth = 4;
-		gbc.anchor = GridBagConstraints.NORTHEAST;
-		add(textLabel, gbc);
+		gbl.setConstraints(stopBtn, gbc);
+		jp.add(stopBtn);
 
-		gbc.gridy++;
-		gbc.gridx = 0;
-		gbc.gridwidth = 5;
-		gbc.anchor = GridBagConstraints.NORTHEAST;
-		add(button, gbc);
+		add(jp);
 
+	}
+
+	public void defaultButtonsState() {
+		startBtn.setEnabled(true);
+		pauseBtn.setEnabled(false);
+		stopBtn.setEnabled(false);
+	}
+
+	public boolean checkingTextFields() {
+		boolean error = false;
+		if (titleField.getText().isEmpty() || descrField.getText().isEmpty()) {
+			error = true;
+		}
+		return error;
+	}
+
+	public void textFieldErrorPane() {
+		JOptionPane.showMessageDialog(null, "Both fields must be entered");
+		if (titleField.getText().isEmpty()) {
+			titleField.requestFocus();
+		} else {
+			descrField.requestFocus();
+		}
 	}
 
 	public void setWatchPanelListener(TableListener tableListener) {

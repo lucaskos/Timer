@@ -12,7 +12,6 @@ public class ActivityTableModel extends AbstractTableModel {
 	private String[] colNames = { "ID", "Title", "Description", "Time" };
 
 	public ActivityTableModel() {
-		System.out.println(this.getColumnName(1));
 	}
 
 	@Override
