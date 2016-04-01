@@ -1,17 +1,16 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Savepoint;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,7 +37,14 @@ public class StopWatchPanel extends JPanel {
 	private JLabel titleLabel;
 	private JLabel descrLabel;
 	private TableListener tableListener;
-
+	
+	final String labels[] = { "A", "B", "C", "D", "E", "F", "G" };
+	private JLabel projectLabel;
+	private JComboBox<String> projectList;
+	private DefaultComboBoxModel<String> listModel;
+	private JScrollPane scrollList;
+	private JButton projectOkBtn;
+	
 	private JPanel jp;
 
 	public StopWatchPanel() {
@@ -58,7 +64,7 @@ public class StopWatchPanel extends JPanel {
 		titleField = new JTextField(size);
 		descrField = new JTextArea();
 
-		descrLabel = new JLabel("descrField: ");
+		descrLabel = new JLabel("Description");
 
 		descrField.setColumns(size);
 		descrField.setWrapStyleWord(false);
@@ -66,6 +72,12 @@ public class StopWatchPanel extends JPanel {
 		descrField.setRows(4);
 		descrField.setVisible(true);
 
+		projectOkBtn = new JButton("Add Project");
+		listModel = new DefaultComboBoxModel<>(labels);
+		projectLabel = new JLabel("Projects");
+		projectList = new JComboBox<String>(listModel);
+		scrollList = new JScrollPane(projectList);
+		
 		makeLayout();
 		defaultButtonsState();
 
@@ -105,6 +117,8 @@ public class StopWatchPanel extends JPanel {
 						descrFieldFieldText, time);
 				if (tableListener != null) {
 					tableListener.formEventOccurred(ev);
+					startBtn.setEnabled(true);
+					stopBtn.setEnabled(false);
 				}
 				// after the object is saved
 				titleField.setText(null);
@@ -159,6 +173,20 @@ public class StopWatchPanel extends JPanel {
 		// first label
 
 		gbc.gridy = 0;
+		gbc.gridx = 0;
+		gbl.setConstraints(projectLabel, gbc);
+		jp.add(projectLabel);
+		
+		gbc.gridy++;
+		gbc.gridx = 0;
+		gbl.setConstraints(scrollList, gbc);
+		jp.add(scrollList);
+		
+		gbc.gridx = 1;
+		gbl.setConstraints(projectOkBtn, gbc);
+		jp.add(projectOkBtn);
+		
+		gbc.gridy++;
 		gbc.gridx = 0;
 		gbl.setConstraints(titleLabel, gbc);
 		jp.add(titleLabel);
